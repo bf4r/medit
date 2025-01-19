@@ -18,7 +18,7 @@ public class Editor
 
         if (Mode == "command")
         {
-            Console.WriteLine("C");
+            Console.Write("C");
             var input = Console.ReadLine();
             if (input == "t")
             {
@@ -26,6 +26,10 @@ public class Editor
                 string newBufferName = Guid.NewGuid().ToString();
                 Buffers.Add(newBufferName, "");
                 CurrentBuffer = newBufferName;
+            }
+            else if (input == "q")
+            {
+                Environment.Exit(0);
             }
         }
         else if (Mode == "text")
@@ -57,12 +61,15 @@ public class Editor
         }
         else if (Mode == "save")
         {
-            Console.WriteLine("S");
-            string fileName = Console.ReadLine() ?? Guid.NewGuid().ToString() + ".txt";
+            Console.Write("S");
+            string input = Console.ReadLine()!;
+            if (string.IsNullOrEmpty(input)) return;
+            string fileName = input;
             string workingDirectory = Directory.GetCurrentDirectory();
             string fullPath = Path.Combine(workingDirectory, fileName);
             string bufferText = Buffers[CurrentBuffer!];
             File.WriteAllText(fullPath, bufferText);
+            Mode = "command";
         }
     }
 }
