@@ -23,6 +23,16 @@ public class Editor
             if (input == "t")
             {
                 Mode = "text";
+                if (CurrentBuffer == null)
+                {
+                    string newBufferName = Guid.NewGuid().ToString();
+                    Buffers.Add(newBufferName, "");
+                    CurrentBuffer = newBufferName;
+                }
+            }
+            if (input == "n")
+            {
+                Mode = "text";
                 string newBufferName = Guid.NewGuid().ToString();
                 Buffers.Add(newBufferName, "");
                 CurrentBuffer = newBufferName;
@@ -30,6 +40,23 @@ public class Editor
             else if (input == "q")
             {
                 Environment.Exit(0);
+            }
+            else if (input == "s")
+            {
+                Mode = "save";
+            }
+            else if (input == "bi")
+            {
+                // Buffer ID
+                Console.WriteLine(CurrentBuffer);
+            }
+            else if (input == "r")
+            {
+                // Read buffer
+                if (CurrentBuffer != null)
+                {
+                    Console.WriteLine(Buffers[CurrentBuffer]);
+                }
             }
         }
         else if (Mode == "text")
@@ -40,19 +67,9 @@ public class Editor
             {
                 input = input.Substring(1);
             }
-
             if (input == "@!c")
             {
                 Mode = "command";
-            }
-            else if (input == "@!s")
-            {
-                Mode = "save";
-            }
-            // Buffer ID
-            else if (input == "@/bi")
-            {
-                Console.WriteLine(CurrentBuffer);
             }
             else
             {
