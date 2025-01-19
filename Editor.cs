@@ -77,7 +77,7 @@ public class Editor
             }
             else
             {
-                Buffers[CurrentBuffer!] += input + Environment.NewLine;
+                Buffers[CurrentBuffer!] += (Buffers[CurrentBuffer!].Length == 0 ? "" : Environment.NewLine) + input;
             }
         }
         else if (Mode == "save")
