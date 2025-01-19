@@ -12,13 +12,17 @@ public class Editor
     public string Mode = "command";
     public Dictionary<string, string> Buffers = new();
     public string? CurrentBuffer;
+    public void ModeIndicator(string modeText)
+    {
+        Console.Write(modeText + " ~> ");
+    }
     public void Read()
     {
         if (CurrentBuffer == null) Mode = "command";
 
         if (Mode == "command")
         {
-            Console.Write("C");
+            ModeIndicator("C");
             var input = Console.ReadLine();
             if (input == "t")
             {
@@ -61,7 +65,7 @@ public class Editor
         }
         else if (Mode == "text")
         {
-            Console.Write("T");
+            ModeIndicator("T");
             string input = Console.ReadLine() ?? "";
             if (input.StartsWith(@"\"))
             {
@@ -78,7 +82,7 @@ public class Editor
         }
         else if (Mode == "save")
         {
-            Console.Write("S");
+            ModeIndicator("S");
             string input = Console.ReadLine()!;
             if (string.IsNullOrEmpty(input)) return;
             string fileName = input;
