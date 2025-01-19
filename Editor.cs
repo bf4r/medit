@@ -71,7 +71,7 @@ public class Editor
             {
                 input = input.Substring(1);
             }
-            if (input == "@!c")
+            if (input == "@c")
             {
                 Mode = "command";
             }
