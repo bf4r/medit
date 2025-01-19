@@ -3,6 +3,7 @@ public class Program
 {
     public static void Main()
     {
-        Editor.MainLoop();
+        var editor = new Editor();
+        editor.MainLoop();
     }
 }
