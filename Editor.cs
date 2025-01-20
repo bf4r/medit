@@ -99,7 +99,7 @@ public class Editor
                     CurrentBuffer = newBufferName;
                 }
             }
-            if (input == "n")
+            else if (input == "n")
             {
                 Mode = "text";
                 string newBufferName = Guid.NewGuid().ToString();
@@ -153,6 +153,7 @@ public class Editor
             List<string> lines = Buffers[CurrentBuffer!].Split(Environment.NewLine).ToList();
             lines.Insert(CurrentLine, input);
             Buffers[CurrentBuffer!] = string.Join(Environment.NewLine, lines);
+            CurrentLine++;
         }
         else if (Mode == "save")
         {
