@@ -85,122 +85,126 @@ public class Editor
     {
         if (CurrentBuffer == null) Mode = "command";
 
-        if (Mode == "command")
+        switch (Mode)
         {
-            ModeIndicator("C");
-            var input = Console.ReadLine();
-            if (input == "t")
-            {
-                Mode = "text";
-                if (CurrentBuffer == null)
+            case "command":
                 {
-                    string newBufferName = Guid.NewGuid().ToString();
-                    Buffers.Add(newBufferName, "");
-                    CurrentBuffer = newBufferName;
-                }
-            }
-            else if (input == "n")
-            {
-                Mode = "text";
-                string newBufferName = Guid.NewGuid().ToString();
-                Buffers.Add(newBufferName, "");
-                CurrentBuffer = newBufferName;
-            }
-            else if (input == "q")
-            {
-                Environment.Exit(0);
-            }
-            else if (input == "s")
-            {
-                Mode = "save";
-            }
-            else if (input == "bi")
-            {
-                // Buffer ID
-                Console.WriteLine(CurrentBuffer);
-            }
-            else if (input == "j")
-            {
-                // Jump to buffer line, insert at that line.
-                Mode = "jump";
-            }
-            else if (input == "w")
-            {
-                // Where am I?
-                if (CurrentBuffer != null)
-                {
-                    Console.WriteLine(CurrentLine.ToString().PadRight(4) + Buffers[CurrentBuffer].Split(Environment.NewLine)[CurrentLine]);
-                }
-            }
-            else if (input == "r")
-            {
-                // Read buffer
-                if (CurrentBuffer != null)
-                {
-                    Console.WriteLine(Buffers[CurrentBuffer]);
-                }
-            }
-            else if (input == "rn")
-            {
-                // Read buffer with line numbers
-                if (CurrentBuffer != null)
-                {
-                    var lines = Buffers[CurrentBuffer].Split(Environment.NewLine);
-                    for (int i = 0; i < lines.Length; i++)
+                    ModeIndicator("C");
+                    var input = Console.ReadLine();
+                    switch (input)
                     {
-                        bool onCurrentLine = i == CurrentLine;
-                        if (onCurrentLine) Console.ForegroundColor = ConsoleColor.Yellow;
-                        Console.WriteLine(i.ToString().PadRight(4) + lines[i]);
-                        if (onCurrentLine) Console.ResetColor();
+                        case "t":
+                            {
+                                Mode = "text";
+                                if (CurrentBuffer == null)
+                                {
+                                    string newBufferName = Guid.NewGuid().ToString();
+                                    Buffers.Add(newBufferName, "");
+                                    CurrentBuffer = newBufferName;
+                                }
+                            }
+                            break;
+                        case "n":
+                            {
+                                Mode = "text";
+                                string newBufferName = Guid.NewGuid().ToString();
+                                Buffers.Add(newBufferName, "");
+                                CurrentBuffer = newBufferName;
+                            }
+                            break;
+                        case "q":
+                            Environment.Exit(0);
+                            break;
+                        case "s":
+                            Mode = "save";
+                            break;
+                        case "bi":
+                            // Buffer ID
+                            Console.WriteLine(CurrentBuffer);
+                            break;
+                        case "j":
+                            // Jump to buffer
+                            Mode = "jump";
+                            break;
+                        case "w":
+                            // Where am I?
+                            if (CurrentBuffer != null)
+                            {
+                                Console.WriteLine(CurrentLine.ToString().PadRight(4) + Buffers[CurrentBuffer].Split(Environment.NewLine)[CurrentLine]);
+                            }
+                            break;
+                        case "r":
+                            // Read buffer
+                            if (CurrentBuffer != null)
+                            {
+                                Console.WriteLine(Buffers[CurrentBuffer]);
+                            }
+                            break;
+                        case "rn":
+                            // Read buffer with line numbers
+                            if (CurrentBuffer != null)
+                            {
+                                var lines = Buffers[CurrentBuffer].Split(Environment.NewLine);
+                                for (int i = 0; i < lines.Length; i++)
+                                {
+                                    bool onCurrentLine = i == CurrentLine;
+                                    if (onCurrentLine) Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Console.WriteLine(i.ToString().PadRight(4) + lines[i]);
+                                    if (onCurrentLine) Console.ResetColor();
+                                }
+                            }
+                            break;
+                        default:
+                            Console.WriteLine("what");
+                            break;
                     }
                 }
-            }
-            else
-            {
-                Console.WriteLine("what");
-            }
-        }
-        else if (Mode == "text")
-        {
-            ModeIndicator("T");
-            string? input = CustomReadLine();
-            if (input == null) return;
-            List<string> lines = Buffers[CurrentBuffer!].Split(Environment.NewLine).ToList();
-            lines.Insert(CurrentLine, input);
-            Buffers[CurrentBuffer!] = string.Join(Environment.NewLine, lines);
-            CurrentLine++;
-        }
-        else if (Mode == "save")
-        {
-            ModeIndicator("S");
-            string input = Console.ReadLine()!;
-            if (string.IsNullOrEmpty(input)) return;
-            string fileName = input;
-            string workingDirectory = Directory.GetCurrentDirectory();
-            string fullPath = Path.Combine(workingDirectory, fileName);
-            string bufferText = Buffers[CurrentBuffer!];
-            File.WriteAllText(fullPath, bufferText);
-            Mode = "command";
-        }
-        else if (Mode == "jump")
-        {
-            ModeIndicator("J");
-            string input = Console.ReadLine()!;
-            if (string.IsNullOrEmpty(input)) return;
-            if (int.TryParse(input, out int desiredLine))
-            {
-                int bufferLineCount = Buffers[CurrentBuffer!].Split(Environment.NewLine).Length;
-                if (desiredLine > Buffers[CurrentBuffer!].Split(Environment.NewLine).Length)
+                break;
+            case "text":
                 {
-                    Console.WriteLine("max " + bufferLineCount);
+                    ModeIndicator("T");
+                    string? input = CustomReadLine();
+                    if (input == null) return;
+                    List<string> lines = Buffers[CurrentBuffer!].Split(Environment.NewLine).ToList();
+                    lines.Insert(CurrentLine, input);
+                    Buffers[CurrentBuffer!] = string.Join(Environment.NewLine, lines);
+                    CurrentLine++;
                 }
-                else
+                break;
+            case "save":
                 {
-                    CurrentLine = desiredLine;
+                    ModeIndicator("S");
+                    string input = Console.ReadLine()!;
+                    if (string.IsNullOrEmpty(input)) return;
+                    string fileName = input;
+                    string workingDirectory = Directory.GetCurrentDirectory();
+                    string fullPath = Path.Combine(workingDirectory, fileName);
+                    string bufferText = Buffers[CurrentBuffer!];
+                    File.WriteAllText(fullPath, bufferText);
+                    Mode = "command";
                 }
-            }
-            else Console.WriteLine("bad number");
-            Mode = "command";
+                break;
+            case "jump":
+                {
+                    ModeIndicator("J");
+                    string input = Console.ReadLine()!;
+                    if (string.IsNullOrEmpty(input)) return;
+                    if (int.TryParse(input, out int desiredLine))
+                    {
+                        int bufferLineCount = Buffers[CurrentBuffer!].Split(Environment.NewLine).Length;
+                        if (desiredLine > Buffers[CurrentBuffer!].Split(Environment.NewLine).Length)
+                        {
+                            Console.WriteLine("max " + bufferLineCount);
+                        }
+                        else
+                        {
+                            CurrentLine = desiredLine;
+                        }
+                    }
+                    else Console.WriteLine("bad number");
+                    Mode = "command";
+                }
+                break;
         }
     }
 }
