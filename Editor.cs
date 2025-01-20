@@ -13,6 +13,7 @@ public class Editor
     public string Mode = "command";
     public Dictionary<string, string> Buffers = new();
     public string? CurrentBuffer;
+    public int CurrentLine;
     public void ModeIndicator(string modeText)
     {
         Console.Write(modeText + " ~> ");
@@ -118,6 +119,11 @@ public class Editor
                 // Buffer ID
                 Console.WriteLine(CurrentBuffer);
             }
+            else if (input == "j")
+            {
+                // Jump to buffer line, insert at that line.
+                Mode = "jump";
+            }
             else if (input == "r")
             {
                 // Read buffer
@@ -132,18 +138,9 @@ public class Editor
             ModeIndicator("T");
             string? input = CustomReadLine();
             if (input == null) return;
-            if (input.StartsWith(@"\"))
-            {
-                input = input.Substring(1);
-            }
-            if (input == "@c")
-            {
-                Mode = "command";
-            }
-            else
-            {
-                Buffers[CurrentBuffer!] += (Buffers[CurrentBuffer!].Length == 0 ? "" : Environment.NewLine) + input;
-            }
+            List<string> lines = Buffers[CurrentBuffer!].Split(Environment.NewLine).ToList();
+            lines.Insert(CurrentLine, input);
+            Buffers[CurrentBuffer!] = string.Join(Environment.NewLine, lines);
         }
         else if (Mode == "save")
         {
@@ -155,6 +152,26 @@ public class Editor
             string fullPath = Path.Combine(workingDirectory, fileName);
             string bufferText = Buffers[CurrentBuffer!];
             File.WriteAllText(fullPath, bufferText);
+            Mode = "command";
+        }
+        else if (Mode == "jump")
+        {
+            ModeIndicator("J");
+            string input = Console.ReadLine()!;
+            if (string.IsNullOrEmpty(input)) return;
+            if (int.TryParse(input, out int desiredLine))
+            {
+                int bufferLineCount = Buffers[CurrentBuffer!].Split(Environment.NewLine).Length;
+                if (desiredLine > Buffers[CurrentBuffer!].Split(Environment.NewLine).Length)
+                {
+                    Console.WriteLine("max " + bufferLineCount);
+                }
+                else
+                {
+                    CurrentLine = desiredLine;
+                }
+            }
+            else Console.WriteLine("");
             Mode = "command";
         }
     }
