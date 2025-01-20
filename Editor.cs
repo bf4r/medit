@@ -52,7 +52,7 @@ public class Editor
                     break;
                 case ConsoleKey.Escape:
                     Mode = "command";
-                    Console.WriteLine();
+                    Console.SetCursorPosition(0, Console.CursorTop);
                     return null;
                 case ConsoleKey.LeftArrow:
                     if (position > 0) position--;
@@ -146,6 +146,10 @@ public class Editor
                         if (onCurrentLine) Console.ResetColor();
                     }
                 }
+            }
+            else
+            {
+                Console.WriteLine("what");
             }
         }
         else if (Mode == "text")
