@@ -30,7 +30,6 @@ public class Editor
             ConsoleKeyInfo ki = Console.ReadKey(true);
             ConsoleKey key = ki.Key;
             char kc = ki.KeyChar;
-            bool ctrl = ki.Modifiers == ConsoleModifiers.Control;
             switch (key)
             {
                 case ConsoleKey.Enter:
@@ -54,11 +53,6 @@ public class Editor
                     Mode = "command";
                     Console.WriteLine();
                     return null;
-                // todo: move by 1 word
-                // case ConsoleKey.LeftArrow when ctrl:
-                //     break;
-                // case ConsoleKey.RightArrow when ctrl:
-                //     break;
                 case ConsoleKey.LeftArrow:
                     if (position > 0) position--;
                     break;
