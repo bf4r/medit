@@ -1,4 +1,5 @@
 namespace Medit;
+using System.Text;
 public class Editor
 {
     public void MainLoop()
@@ -15,6 +16,69 @@ public class Editor
     public void ModeIndicator(string modeText)
     {
         Console.Write(modeText + " ~> ");
+    }
+    public string? CustomReadLine()
+    {
+        var sb = new StringBuilder();
+        int startPos = Console.CursorLeft;
+        int startLine = Console.CursorTop;
+        int position = 0;
+        // relative to start of input, how many lines down we are
+        int linePosition = 0;
+        while (true)
+        {
+            ConsoleKeyInfo ki = Console.ReadKey(true);
+            ConsoleKey key = ki.Key;
+            char kc = ki.KeyChar;
+            bool ctrl = ki.Modifiers == ConsoleModifiers.Control;
+            switch (key)
+            {
+                case ConsoleKey.Enter:
+                    Console.WriteLine();
+                    return sb.ToString();
+                case ConsoleKey.Backspace:
+                    if (position > 0)
+                    {
+                        Console.Write("\b \b");
+                        if (position != sb.Length)
+                        {
+                            var remainingText = sb.ToString().Substring(position);
+                            Console.Write(remainingText + ' ');
+                            Console.Write(new string('\b', remainingText.Length + 1));
+                        }
+                        sb.Remove(position - 1, 1);
+                        position--;
+                    }
+                    break;
+                case ConsoleKey.Escape:
+                    Mode = "command";
+                    Console.WriteLine();
+                    return null;
+                // todo: move by 1 word
+                // case ConsoleKey.LeftArrow when ctrl:
+                //     break;
+                // case ConsoleKey.RightArrow when ctrl:
+                //     break;
+                case ConsoleKey.LeftArrow:
+                    if (position > 0) position--;
+                    break;
+                case ConsoleKey.RightArrow:
+                    if (position < sb.Length) position++;
+                    break;
+                default:
+                    sb.Insert(position, kc);
+                    if (position != sb.Length)
+                    {
+                        string remainingText = sb.ToString().Substring(position);
+                        Console.Write(remainingText);
+                        Console.Write(new string('\b', remainingText.Length));
+                    }
+                    position++;
+                    Console.Write(kc);
+                    break;
+            }
+            Console.SetCursorPosition(startPos + position, startLine + linePosition);
+        }
     }
     public void Read()
     {
@@ -66,7 +130,8 @@ public class Editor
         else if (Mode == "text")
         {
             ModeIndicator("T");
-            string input = Console.ReadLine() ?? "";
+            string? input = CustomReadLine();
+            if (input == null) return;
             if (input.StartsWith(@"\"))
             {
                 input = input.Substring(1);
