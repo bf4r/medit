@@ -154,6 +154,27 @@ public class Editor
                                 }
                             }
                             break;
+                        case "d":
+                            // Removes current line
+                            {
+                                if (CurrentBuffer != null)
+                                {
+                                    var lines = Buffers[CurrentBuffer].Split(Environment.NewLine).ToList();
+                                    if (lines.Count == 1) lines.Add("");
+                                    lines.RemoveAt(CurrentLine);
+                                    Buffers[CurrentBuffer] = string.Join(Environment.NewLine, lines);
+                                    // if on the last line, decrease line
+                                    if (CurrentLine > lines.Count - 1)
+                                    {
+                                        CurrentLine--;
+                                    }
+                                    if (CurrentLine < 0)
+                                    {
+                                        CurrentLine = 0;
+                                    }
+                                }
+                            }
+                            break;
                         default:
                             Console.WriteLine("what");
                             break;
