@@ -202,12 +202,18 @@ public class Editor
                     {
                         fullPath = input;
                     }
+                    else if (input.StartsWith("~/"))
+                    {
+                        if (OperatingSystem.IsLinux())
+                            fullPath = $"/home/{Environment.UserName}/{input.Substring(2)}";
+                        else if (OperatingSystem.IsWindows())
+                            fullPath = $"C:\\Users\\{Environment.UserName}\\{input.Substring(2)}";
+                    }
                     else
                     {
                         string workingDirectory = Directory.GetCurrentDirectory();
                         fullPath = Path.Combine(workingDirectory, input);
                     }
-
                     string bufferText = Buffers[CurrentBuffer!];
                     var parts = fullPath.Split(Path.DirectorySeparatorChar);
                     var parentDirectory = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
