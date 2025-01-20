@@ -124,6 +124,14 @@ public class Editor
                 // Jump to buffer line, insert at that line.
                 Mode = "jump";
             }
+            else if (input == "w")
+            {
+                // Where am I?
+                if (CurrentBuffer != null)
+                {
+                    Console.WriteLine(CurrentLine.ToString().PadRight(4) + Buffers[CurrentBuffer].Split(Environment.NewLine)[CurrentLine]);
+                }
+            }
             else if (input == "r")
             {
                 // Read buffer
