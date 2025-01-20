@@ -140,7 +140,10 @@ public class Editor
                     var lines = Buffers[CurrentBuffer].Split(Environment.NewLine);
                     for (int i = 0; i < lines.Length; i++)
                     {
+                        bool onCurrentLine = i == CurrentLine;
+                        if (onCurrentLine) Console.ForegroundColor = ConsoleColor.Yellow;
                         Console.WriteLine(i.ToString().PadRight(4) + lines[i]);
+                        if (onCurrentLine) Console.ResetColor();
                     }
                 }
             }
