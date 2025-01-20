@@ -176,10 +176,24 @@ public class Editor
                     ModeIndicator("S");
                     string input = Console.ReadLine()!;
                     if (string.IsNullOrEmpty(input)) return;
-                    string fileName = input;
-                    string workingDirectory = Directory.GetCurrentDirectory();
-                    string fullPath = Path.Combine(workingDirectory, fileName);
+                    var fullPath = "";
+                    if (Path.IsPathRooted(input))
+                    {
+                        fullPath = input;
+                    }
+                    else
+                    {
+                        string workingDirectory = Directory.GetCurrentDirectory();
+                        fullPath = Path.Combine(workingDirectory, input);
+                    }
+
                     string bufferText = Buffers[CurrentBuffer!];
+                    var parts = fullPath.Split(Path.DirectorySeparatorChar);
+                    var parentDirectory = string.Join(Path.DirectorySeparatorChar, parts.Take(parts.Length - 1));
+                    if (!Directory.Exists(parentDirectory))
+                    {
+                        Directory.CreateDirectory(parentDirectory);
+                    }
                     File.WriteAllText(fullPath, bufferText);
                     Mode = "command";
                 }
