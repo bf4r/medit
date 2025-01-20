@@ -187,7 +187,7 @@ public class Editor
                     CurrentLine = desiredLine;
                 }
             }
-            else Console.WriteLine("");
+            else Console.WriteLine("bad number");
             Mode = "command";
         }
     }
