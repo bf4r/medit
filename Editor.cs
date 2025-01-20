@@ -65,6 +65,12 @@ public class Editor
                 case ConsoleKey.RightArrow:
                     if (position < sb.Length) position++;
                     break;
+                case ConsoleKey.Home:
+                    position = 0;
+                    break;
+                case ConsoleKey.End:
+                    position = sb.Length;
+                    break;
                 default:
                     sb.Insert(position, kc);
                     if (position != sb.Length)
