@@ -132,6 +132,18 @@ public class Editor
                     Console.WriteLine(Buffers[CurrentBuffer]);
                 }
             }
+            else if (input == "rn")
+            {
+                // Read buffer with line numbers
+                if (CurrentBuffer != null)
+                {
+                    var lines = Buffers[CurrentBuffer].Split(Environment.NewLine);
+                    for (int i = 0; i < lines.Length; i++)
+                    {
+                        Console.WriteLine(i.ToString().PadRight(4) + lines[i]);
+                    }
+                }
+            }
         }
         else if (Mode == "text")
         {
