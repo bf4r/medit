@@ -126,6 +126,27 @@ public class Editor
                             // Jump to buffer
                             Mode = "jump";
                             break;
+                        case "ju":
+                            // Jump up
+                            if (CurrentBuffer != null)
+                            {
+                                if (CurrentLine > 0)
+                                {
+                                    CurrentLine--;
+                                }
+                            }
+                            break;
+                        case "jd":
+                            // Jump down
+                            if (CurrentBuffer != null)
+                            {
+                                var lines = Buffers[CurrentBuffer].Split(Environment.NewLine);
+                                if (CurrentLine != lines.Length - 1)
+                                {
+                                    CurrentLine++;
+                                }
+                            }
+                            break;
                         case "w":
                             // Where am I?
                             if (CurrentBuffer != null)
