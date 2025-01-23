@@ -175,6 +175,21 @@ public class Editor
                                 }
                             }
                             break;
+                        case "p":
+                            // Pastes a line
+                            // the current line gets pasted below
+                            // and cursor gets moved 1 below
+                            {
+                                if (CurrentBuffer != null)
+                                {
+                                    var lines = Buffers[CurrentBuffer].Split(Environment.NewLine).ToList();
+                                    var currentLineText = lines[CurrentLine];
+                                    lines.Insert(CurrentLine, currentLineText);
+                                    Buffers[CurrentBuffer] = string.Join(Environment.NewLine, lines);
+                                    CurrentLine++;
+                                }
+                            }
+                            break;
                         default:
                             Console.WriteLine("what");
                             break;
